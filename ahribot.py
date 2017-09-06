@@ -3,6 +3,9 @@ import websockets
 import discord
 import requests
 from discord.ext import commands
+import os
+import hashlib
+
 
 
 r = requests.get("https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/beastlymonkey?api_key=RGAPI-dd80b910-d882-4b82-8e11-30a58938652a")
@@ -47,5 +50,25 @@ async def on_command_error(ex, ctx):
 async def hello():
     await bot.send_message('Hello')
     return
+
+def load_extension(ext: str):
+    bot.load_extension(ext)
+
+    with open('./%s.py' % ext.replace('.', '/'), 'rb') as f:
+        cog_hashes[ext] = hashlib.sha1(f.read()).hexdigest()
+
+
+# Loading extensions
+startup_extensions = ['commands.%s' % fn.replace('.py', '') for fn in os.listdir('./commands/admin') if fn.endswith('.py')]
+startup_extensions += ['commands.%s' % fn.replace('.py', '') for fn in os.listdir('./commands/league') if fn.endswith('.py')]
+startup_extensions += ['commands.%s' % fn.replace('.py', '') for fn in os.listdir('./commands/music') if fn.endswith('.py')]
+
+
+for ext in startup_extensions:
+    try:
+        load_extension(ext)
+    except Exception as e:
+        exc = '{}: {}'.format(type(e).__name__, e)
+        print('Failed to load extension {}\n{}'.format(ext, exc))
 
 bot.run(TOKEN)
