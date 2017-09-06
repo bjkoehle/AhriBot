@@ -6,15 +6,7 @@ from discord.ext import commands
 import os
 import hashlib
 
-
-
-r = requests.get("https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/beastlymonkey?api_key=RGAPI-dd80b910-d882-4b82-8e11-30a58938652a")
-d = r.json()
-print(d['beastlymonkey']['id'])
-
 bot = commands.bot(command_prefix = '?', description = "A simple discord bot.")
-
-TOKEN = 'MzA5OTYyMzUwMDA0NTM1Mjk5.DG5jiw.dlgihIX4FZZd7U26NYhDfh6hCgc'
 
 @bot.event
 async def on_ready():
