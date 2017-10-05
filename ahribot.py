@@ -5,8 +5,11 @@ import requests
 from discord.ext import commands
 import os
 import hashlib
+from secret import BOT_TOKEN as TOKEN
+import sys
+sys.path.insert( 0, './')
 
-bot = commands.bot(command_prefix = '?', description = "A simple discord bot.")
+bot = commands.Bot(command_prefix = '?', description = "A simple discord bot.")
 
 @bot.event
 async def on_ready():
@@ -43,22 +46,16 @@ async def hello():
     await bot.send_message('Hello')
     return
 
-def load_extension(ext: str):
-    bot.load_extension(ext)
-
-    with open('./%s.py' % ext.replace('.', '/'), 'rb') as f:
-        cog_hashes[ext] = hashlib.sha1(f.read()).hexdigest()
-
 
 # Loading extensions
-startup_extensions = ['commands.%s' % fn.replace('.py', '') for fn in os.listdir('./commands/admin') if fn.endswith('.py')]
-startup_extensions += ['commands.%s' % fn.replace('.py', '') for fn in os.listdir('./commands/league') if fn.endswith('.py')]
-startup_extensions += ['commands.%s' % fn.replace('.py', '') for fn in os.listdir('./commands/music') if fn.endswith('.py')]
+startup_extensions = ['commands.admin.%s' % fn.replace('.py', '') for fn in os.listdir('./commands/admin') if fn.endswith('.py')]
+startup_extensions += ['commands.league.%s' % fn.replace('.py', '') for fn in os.listdir('./commands/league') if fn.endswith('.py')]
+startup_extensions += ['commands.music.%s' % fn.replace('.py', '') for fn in os.listdir('./commands/music') if fn.endswith('.py')]
 
 
 for ext in startup_extensions:
     try:
-        load_extension(ext)
+        bot.load_extension(ext)
     except Exception as e:
         exc = '{}: {}'.format(type(e).__name__, e)
         print('Failed to load extension {}\n{}'.format(ext, exc))

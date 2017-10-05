@@ -60,3 +60,5 @@ target/
 #Ingore these
 __pycache__/
 secret/
+secret.py
+tester.py

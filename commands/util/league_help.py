@@ -1,6 +1,6 @@
 
 
-baseUri = "https://na.api.pvp.net/api/lol"
+baseUri = "https://na1.api.riotgames.com/lol"
 cmV3 = "/champion-mastery/v3" #champion mastery data
 championV3 = "/platform/v3" #champion data
 leagueV3 = "/league/v3" #For individual leagues in ranked
