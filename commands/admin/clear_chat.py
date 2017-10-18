@@ -25,7 +25,7 @@ class ClearChat:
                 pass
 
     @commands.command(pass_context = True, description = 'Clears the chat back x ammount of messages')
-    async def clearChat(self, ctx, number: int):
+    async def clearChat(self, ctx, number: int = 100):
 
         channel = ctx.message.channel
         author = ctx.message.author

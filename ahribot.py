@@ -6,11 +6,13 @@ from discord.ext import commands
 import os
 import hashlib
 from secret import BOT_TOKEN as TOKEN
+# Allows for loading of util and other packages written as helper functions
 import sys
 sys.path.insert( 0, './')
 
 bot = commands.Bot(command_prefix = '?', description = "A simple discord bot.")
 
+# Login event to mark successful connection
 @bot.event
 async def on_ready():
     print('Logged in as')
@@ -18,6 +20,7 @@ async def on_ready():
     print(bot.user.id)
     print('------')
 
+# Handle any errors in trying in commands here
 @bot.event
 async def on_command_error(ex, ctx):
 
@@ -39,7 +42,7 @@ async def on_command_error(ex, ctx):
             'Trace:\n' \
             '%s```' % (ctx.message.content, type(ex.original).__name__, str(ex.original))
 
-        await bot.send_message(discord.Object(id='241984924616359936'), m)
+        print(m)
 
 @bot.command
 async def hello():
@@ -47,12 +50,12 @@ async def hello():
     return
 
 
-# Loading extensions
+# Loading extensions from these folders
 startup_extensions = ['commands.admin.%s' % fn.replace('.py', '') for fn in os.listdir('./commands/admin') if fn.endswith('.py')]
 startup_extensions += ['commands.league.%s' % fn.replace('.py', '') for fn in os.listdir('./commands/league') if fn.endswith('.py')]
 startup_extensions += ['commands.music.%s' % fn.replace('.py', '') for fn in os.listdir('./commands/music') if fn.endswith('.py')]
 
-
+# Looping through extensions and load them as cogs
 for ext in startup_extensions:
     try:
         bot.load_extension(ext)
