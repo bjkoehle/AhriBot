@@ -11,3 +11,7 @@ matchV3 = "/match/v3" #match data
 runesV3 = "/platform/v3/runes/by-summoner"
 spectatorV3 = "/spectator/v3"
 summonerV3 = "/summoner/v3/summoners"
+
+staticRunes = ""
+staticChampions = ""
+staticMasteries = ""

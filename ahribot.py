@@ -19,6 +19,7 @@ async def on_ready():
     print(bot.user.name)
     print(bot.user.id)
     print('------')
+    
 
 # Handle any errors in trying in commands here
 @bot.event
@@ -64,3 +65,5 @@ for ext in startup_extensions:
         print('Failed to load extension {}\n{}'.format(ext, exc))
 
 bot.run(TOKEN)
+
+bot.command("?l_uss")

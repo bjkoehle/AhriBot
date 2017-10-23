@@ -13,37 +13,34 @@ class L_get_game():
     async def l_get_game(self, ctx, summonerName: str):
         try:
             #grab the id from the summoner name
-            sumIdReq = league_help.baseUri + league_help.summonerV3 + "/by-name/" + summonerName + "?api_key=" + LEAUGE_KEY
+            sumIdReq = league_help.baseUri + league_help.summonerV3 + "/by-name/" + "CobatJew" + "?api_key=" + LEAUGE_KEY
             requestSum = requests.get(sumIdReq)
             data = requestSum.json()
             sumID = data['id']
-            
+
             #search for active game
-            getGameRequest = leauge_help.baseUri + leauge_help.spectatorV3 + "/active-games/by-summoner/" + sumID + "?api_key=" + LEAUGE_KEY
+            getGameRequest = league_help.baseUri + league_help.spectatorV3 + "/active-games/by-summoner/" + str(sumID) + "?api_key=" + LEAUGE_KEY
             requestGame = requests.get(getGameRequest)
             data = requestGame.json()
-            
 
             parti = ""
-            
-            for i/2 in data['participants']:
-                parti += ("Summmoner {}: {}, Summoner {}: {};\n", i, data['participants'][i], i + len(data['participants'])/2, data['participants'][len(data['participants'])/2])
-            
-
             #Make sure an active game was found
             if(requestGame.status_code == 200):
+                for i in range(round(len(data['participants'])/2)):
+                    parti += ("Summmoner "+str(i+1)+": "+data['participants'][i]['summonerName']+", Summoner "+str(1 + i + round(len(data['participants'])/2))+": "+data['participants'][round(i + len(data['participants'])/2)]['summonerName']+";\n")
                 try:
-                    await self.bot.say(
-                        "Banned Champions:\n"
-                        data['bannedChampions'] + "\n\n"
-                        + "Game Length:\n" + str(data['gameLength']) + "\n\n"
+                    self.bot.say(
+                        "Game Mode: " + str(data['gameMode']) + "\n"
+                        + "Game Type: " + str(data['gameType']) + "\n\n"
+                        + "Banned Champions:\n" + str(data['bannedChampions']) + "\n\n" #TODO: get champions by id here
+                        + "Game Length:\n" + str(round(data['gameLength']/60)) + "min" + "\n\n"
                         + parti + "\n"
                     )
                 except Exception as e:
                     print("Exception: " + e)
-            else: print(requestGame.status_code)
-        
-        except Exception as e: print("Exception: " + e)
+            else: 
+                try: self.bot.say(requestGame.status_code, "\n" + data['status']['message']) 
+                except Exception as e: print("Exception: " + e)
 
 def setup(bot):
     bot.add_cog(L_get_game(bot))

@@ -29,10 +29,7 @@ class L_get_cm():
                 #TODO: get the static data and cahce it. Can only do 10 requests per hour so.
                 y = 10 if 10 < len(statData) else len(statData)
                 for x in range(y):
-                    championRequest = league_help.baseUri + league_help.staticDataV3 + "/champions/" + str(statData[x]['championId']) + "?api_key=" + LEAUGE_KEY
-                    requestChampion = requests.get(championRequest)
-                    champData = requestChampion.json()
-                    championName = champData['name']
+                    #get data from static file or static set global
 
                     formattedText += "Champion: " + championName + "\n"
                     formattedText += "Champion Level: " + str(statData[x]['championLevel']) + ", Chest Acquired: " + str(statData[x]['chestGranted']) + ", Champion Mastery: " + str(statData[x]['championPoints']) +"\n"
