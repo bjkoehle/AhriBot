@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import asyncio 
 
-class ClearChat:
+class Clear_Chat:
 
     def __init__(self, bot):
         self.bot = bot
@@ -25,7 +25,7 @@ class ClearChat:
                 pass
 
     @commands.command(pass_context = True, description = 'Clears the chat back x ammount of messages')
-    async def clearChat(self, ctx, number: int = 100):
+    async def clear_chat(self, ctx, number: int = 100):
 
         channel = ctx.message.channel
         author = ctx.message.author
@@ -48,4 +48,4 @@ class ClearChat:
             await self.slow_deletion(to_delete)
 
 def setup(bot):
-    bot.add_cog(ClearChat(bot))
+    bot.add_cog(Clear_Chat(bot))

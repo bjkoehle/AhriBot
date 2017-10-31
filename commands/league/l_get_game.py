@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-import leauge_help
+from commands.util import league_help
 import requests
 from secret import LEAUGE_KEY
 
@@ -9,8 +9,8 @@ class L_get_game():
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(pass_context = True, description = "Get information about a current Leauge game from summoner name.")
-    async def l_get_game(self, ctx, summonerName: str):
+    @commands.command(description = "Get information about a current Leauge game from summoner name.")
+    async def l_get_game(self, summonerName):
         try:
             #grab the id from the summoner name
             sumIdReq = league_help.baseUri + league_help.summonerV3 + "/by-name/" + "CobatJew" + "?api_key=" + LEAUGE_KEY
@@ -27,7 +27,8 @@ class L_get_game():
             #Make sure an active game was found
             if(requestGame.status_code == 200):
                 for i in range(round(len(data['participants'])/2)):
-                    parti += ("Summmoner "+str(i+1)+": "+data['participants'][i]['summonerName']+", Summoner "+str(1 + i + round(len(data['participants'])/2))+": "+data['participants'][round(i + len(data['participants'])/2)]['summonerName']+";\n")
+                    parti += ("Summmoner "+str(i+1)+": "+data['participants'][i]['summonerName']+", Summoner "+
+                            str(1 + i + round(len(data['participants'])/2))+": "+data['participants'][round(i + len(data['participants'])/2)]['summonerName']+";\n")
                 try:
                     self.bot.say(
                         "Game Mode: " + str(data['gameMode']) + "\n"
@@ -39,8 +40,9 @@ class L_get_game():
                 except Exception as e:
                     print("Exception: " + e)
             else: 
-                try: self.bot.say(requestGame.status_code, "\n" + data['status']['message']) 
+                try: self.bot.say("Player does not exist, or is not in a game currently.") 
                 except Exception as e: print("Exception: " + e)
+        except Exception as e: print("Exceptio: " + e)
 
 def setup(bot):
     bot.add_cog(L_get_game(bot))

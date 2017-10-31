@@ -19,6 +19,7 @@ async def on_ready():
     print(bot.user.name)
     print(bot.user.id)
     print('------')
+    bot.command("?l_uss")
     
 
 # Handle any errors in trying in commands here
@@ -52,9 +53,9 @@ async def hello():
 
 
 # Loading extensions from these folders
-startup_extensions = ['commands.admin.%s' % fn.replace('.py', '') for fn in os.listdir('./commands/admin') if fn.endswith('.py')]
-startup_extensions += ['commands.league.%s' % fn.replace('.py', '') for fn in os.listdir('./commands/league') if fn.endswith('.py')]
-startup_extensions += ['commands.music.%s' % fn.replace('.py', '') for fn in os.listdir('./commands/music') if fn.endswith('.py')]
+startup_extensions = ['commands.admin.%s' % fn.replace('.py', '') for fn in os.listdir('./commands/admin') if fn.endswith('.py') and not (fn.endswith('__init__.py') or fn.endswith('tester.py'))]
+startup_extensions += ['commands.league.%s' % fn.replace('.py', '') for fn in os.listdir('./commands/league') if fn.endswith('.py') and not (fn.endswith('__init__.py') or fn.endswith('tester.py'))]
+startup_extensions += ['commands.music.%s' % fn.replace('.py', '') for fn in os.listdir('./commands/music') if fn.endswith('.py') and not fn.endswith('__init__.py')]
 
 # Looping through extensions and load them as cogs
 for ext in startup_extensions:
@@ -65,5 +66,3 @@ for ext in startup_extensions:
         print('Failed to load extension {}\n{}'.format(ext, exc))
 
 bot.run(TOKEN)
-
-bot.command("?l_uss")
