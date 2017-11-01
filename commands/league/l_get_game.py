@@ -13,7 +13,7 @@ class L_get_game():
     async def l_get_game(self, summonerName):
         try:
             #grab the id from the summoner name
-            sumIdReq = league_help.baseUri + league_help.summonerV3 + "/by-name/" + "CobatJew" + "?api_key=" + LEAUGE_KEY
+            sumIdReq = league_help.baseUri + league_help.summonerV3 + "/by-name/" + str(summonerName) + "?api_key=" + LEAUGE_KEY
             requestSum = requests.get(sumIdReq)
             data = requestSum.json()
             sumID = data['id']
