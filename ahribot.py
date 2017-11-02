@@ -20,7 +20,7 @@ async def on_ready():
     print(bot.user.name)
     print(bot.user.id)
     print('------')
-    await bot.commands("?l_uss")
+    
     
 
 # Handle any errors in trying in commands here

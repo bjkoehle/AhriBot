@@ -3,7 +3,7 @@ import requests
 from discord.ext import commands
 
 from commands.util import league_help
-from secret import LEAUGE_KEY
+from secret import LEAGUE_KEY
 
 class L_uss():
 
@@ -18,9 +18,8 @@ class L_uss():
     @commands.command(description = "Update the League static information stored by the bot.")
     async def l_uss(self):
         try:
-            championRequest = league_help.baseUri + league_help.staticDataV3 + "/champions?api_key=" + LEAUGE_KEY
+            championRequest = league_help.baseUri + league_help.staticDataV3 + "/champions?api_key=" + LEAGUE_KEY
             requestChampion = requests.get(championRequest)
-            league_help.staticChampions = requestChampion.json()['data']
 
             if(requestChampion.response_code == 200):
                 print("No key error in l_uss")
@@ -28,11 +27,13 @@ class L_uss():
                 print("Key error in l_uss")
                 return
 
-            championRequest = league_help.baseUri + league_help.staticDataV3 + "/runes?api_key=" + LEAUGE_KEY
+            league_help.staticChampions = requestChampion.json()['data']
+
+            championRequest = league_help.baseUri + league_help.staticDataV3 + "/runes?api_key=" + LEAGUE_KEY
             requestChampion = requests.get(championRequest)
             league_help.staticRunes = requestChampion.json()['data']
 
-            championRequest = league_help.baseUri + league_help.staticDataV3 + "/masteries?api_key=" + LEAUGE_KEY
+            championRequest = league_help.baseUri + league_help.staticDataV3 + "/masteries?api_key=" + LEAGUE_KEY
             requestChampion = requests.get(championRequest)
             league_help.staticMasteries = requestChampion.json()['data']
 

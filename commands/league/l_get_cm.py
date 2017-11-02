@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 from commands.util import league_help
 import requests
-from secret import LEAUGE_KEY
+from secret import LEAGUE_KEY
 
 class L_get_cm():
 
@@ -13,17 +13,19 @@ class L_get_cm():
     async def l_get_cm(self, summonerName):
         try:
             #get summoner ID
-            sumIdReq = league_help.baseUri + league_help.summonerV3 + "/by-name/" + str(summonerName) + "?api_key=" + LEAUGE_KEY
+            sumIdReq = league_help.baseUri + league_help.summonerV3 + "/by-name/" + str(summonerName) + "?api_key=" + LEAGUE_KEY
             requestSum = requests.get(sumIdReq)
             data = requestSum.json()
-            sumID = data['id']
 
             if requestSum.status_code != 200:
                 try: await self.bot.say("Summoner does not exist")
                 except Exception as e: print("Exception: {0}".format(e))
+                return
+
+            sumID = data['id']
 
             #Grad advanced summoner details
-            sumStatsReq = league_help.baseUri + league_help.cmV3 + "/champion-masteries/by-summoner/" + str(sumID) + "?api_key=" + LEAUGE_KEY
+            sumStatsReq = league_help.baseUri + league_help.cmV3 + "/champion-masteries/by-summoner/" + str(sumID) + "?api_key=" + LEAGUE_KEY
             reqStats = requests.get(sumStatsReq)
             statData = reqStats.json()
 
@@ -34,7 +36,7 @@ class L_get_cm():
                 for x in range(y):
                     #get data from static file or static set global
                     championName = ''
-                    for z in league_help.staticChampions['data']:
+                    for z in league_help.staticChampions:
                         if z['id'] == statData[x]['championId']:
                             championName = z['name']
                             break
