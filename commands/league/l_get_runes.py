@@ -20,6 +20,10 @@ class L_get_runes():
             data = requestSum.json()
             sumID = data['id']
 
+            if requestSum.status_code != 200:
+                try: await self.bot.say("Summoner does not exist")
+                except Exception as e: print("Exception: {0}".format(e))
+
             #Grad advanced summoner details
             sumStatsReq = league_help.baseUri + league_help.runesV3 + "/" + str(sumID) + "?api_key=" + LEAUGE_KEY
             reqStats = requests.get(sumStatsReq)
@@ -31,13 +35,13 @@ class L_get_runes():
                 for i in statData['pages']:
                     if i['current'] == True:
                         try:
-                            self.bot.say(i)
+                             await self.bot.say(i)
                         except Exception as e:
                             print("Runes Exception: {0}".format(e))
                         break;
                 #Do something here to format runes
             else:
-                print("Bad request: " + reqStats.status_code)
+                await self.bot.say("Bad request: " + reqStats.status_code)
         except Exception as e:
             print(e)
 

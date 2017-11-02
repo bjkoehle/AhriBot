@@ -17,16 +17,18 @@ class L_see_stats():
             requestSum = requests.get(sumIdReq)
             data = requestSum.json()
             sumID = data['id']
+            
             if requestSum.status_code != 200:
-                print("Error getting Summoner data.")
-                return
+                try: await self.bot.say("Summoner does not exist")
+                except Exception as e: print("Exception: {0}".format(e))
+            
             #Grad advanced summoner details
             sumStatsReq = league_help.baseUri + league_help.leagueV3 + "/positions/by-summoner/" + str(sumID) + "?api_key=" + LEAUGE_KEY
             reqStats = requests.get(sumStatsReq)
             statData = reqStats.json()
 
             if reqStats.status_code != 200:
-                print("Error getting stats details.")
+                await self.bot.say("Error getting stats details. {0}".format(reqStats.status_code))
                 return
             
             formattedText = ""

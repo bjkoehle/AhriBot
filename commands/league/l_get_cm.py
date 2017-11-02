@@ -18,6 +18,10 @@ class L_get_cm():
             data = requestSum.json()
             sumID = data['id']
 
+            if requestSum.status_code != 200:
+                try: await self.bot.say("Summoner does not exist")
+                except Exception as e: print("Exception: {0}".format(e))
+
             #Grad advanced summoner details
             sumStatsReq = league_help.baseUri + league_help.cmV3 + "/champion-masteries/by-summoner/" + str(sumID) + "?api_key=" + LEAUGE_KEY
             reqStats = requests.get(sumStatsReq)
@@ -25,12 +29,15 @@ class L_get_cm():
 
             formattedText = ""
             if reqStats.status_code == 200:
-                #incase there is not enough champions, only grabbing the top 3
-                #TODO: get the static data and cahce it. Can only do 10 requests per hour so.
+                #incase there is not enough champions, only grabbing the top 10
                 y = 10 if 10 < len(statData) else len(statData)
                 for x in range(y):
                     #get data from static file or static set global
-
+                    championName = ''
+                    for z in league_help.staticChampions['data']:
+                        if z['id'] == statData[x]['championId']:
+                            championName = z['name']
+                            break
                     formattedText += "Champion: " + championName + "\n"
                     formattedText += "Champion Level: " + str(statData[x]['championLevel']) + ", Chest Acquired: " + str(statData[x]['chestGranted']) + ", Champion Mastery: " + str(statData[x]['championPoints']) +"\n"
                     formattedText += "Points till next Level: " + str(statData[x]['championPointsUntilNextLevel']) + ", Current Tokens: " + str(statData[x]['tokensEarned']) + "\n\n"
@@ -39,7 +46,7 @@ class L_get_cm():
                 except Exception as e:
                     print(e)
             else:
-                print("Bad request: " + reqStats.status_code)
+                await self.bot.say("Bad request: " + reqStats.status_code)
         except Exception as e:
             print(e)
 

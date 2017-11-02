@@ -9,6 +9,7 @@ from secret import BOT_TOKEN as TOKEN
 # Allows for loading of util and other packages written as helper functions
 import sys
 sys.path.insert( 0, './')
+from commands.util import league_help
 
 bot = commands.Bot(command_prefix = '?', description = "A simple discord bot.")
 
@@ -19,7 +20,7 @@ async def on_ready():
     print(bot.user.name)
     print(bot.user.id)
     print('------')
-    bot.command("?l_uss")
+    await bot.commands("?l_uss")
     
 
 # Handle any errors in trying in commands here
@@ -29,8 +30,7 @@ async def on_command_error(ex, ctx):
     # Did not pass any arguments
     if type(ex).__name__ == 'MissingRequiredArgument':
         await bot.send_message(ctx.message.channel,
-                               'Missing arguments. Type `%s --help` to see what arguments you can pass.' %
-                               ctx.message.content)
+                               'Missing arguments.' )
         return
 
     # Command does not exist

@@ -26,6 +26,7 @@ class L_uss():
                 print("No key error in l_uss")
             else:
                 print("Key error in l_uss")
+                return
 
             championRequest = league_help.baseUri + league_help.staticDataV3 + "/runes?api_key=" + LEAUGE_KEY
             requestChampion = requests.get(championRequest)
@@ -36,11 +37,11 @@ class L_uss():
             league_help.staticMasteries = requestChampion.json()['data']
 
             # Possible fail due to Rate Limiting, only 10 per hour can be made on static data
-            try: self.bot.say("Success\n")
+            try: await self.bot.say("Success\n")
             except Exception as e: print(e)
         except Exception as e:
             try:
-                self.bot.say("Exception: " + e)
+                await self.bot.say("Exception: " + e)
                 print(e)
             except Exception as e: print(e)
 
